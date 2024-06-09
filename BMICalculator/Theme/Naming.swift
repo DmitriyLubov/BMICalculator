@@ -41,6 +41,19 @@ enum Naming {
 		/// Пересчитать.
 		static let recalculate = "RECALCULATE"
 	}
+
+	/// Советы.
+	enum Advices{
+
+		/// При недостатке веса.
+		static let underWeight = "Eat more pies!"
+
+		/// При нормальном весе.
+		static let normal = "Fit as a fiddle!"
+
+		/// При избыточном весе.
+		static let overWeight = "Eat less pies!"
+	}
 }
 
 /// Значения, используемые в приложении.

@@ -11,12 +11,10 @@ import SwiftUI
 #endif
 
 final class ResultViewController: UIViewController {
-	
-	// MARK: - Outlets
-	
-	// MARK: - Public properties
-	
+
 	// MARK: - Dependencies
+
+	private let bmi: BMI
 
 	// MARK: - Private properties
 
@@ -31,6 +29,15 @@ final class ResultViewController: UIViewController {
 
 	// MARK: - Initialization
 
+	init(bmi: BMI) {
+		self.bmi = bmi
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
 	// MARK: - Lifecycle
 
 	override func viewDidLoad() {
@@ -42,10 +49,6 @@ final class ResultViewController: UIViewController {
 		super.viewDidLayoutSubviews()
 		layout()
 	}
-
-	// MARK: - Public methods
-
-	// MARK: - Private methods
 }
 
 // MARK: - Actions
@@ -54,9 +57,6 @@ private extension ResultViewController {
 
 	func recalculateTapped() -> UIAction {
 		UIAction { [weak self] action in
-			guard let sender = action.sender as? UIButton else { return }
-
-			print(sender.configuration?.title ?? "no title")
 			self?.dismiss(animated: true)
 		}
 	}
@@ -67,9 +67,7 @@ private extension ResultViewController {
 private extension ResultViewController {
 
 	func setupUI() {
-		view.backgroundColor = .systemCyan
-		bmiValueLabel.text = "0.0"
-		adviceLabel.text = "Advice"
+		view.backgroundColor = UIColor(named: bmi.color)
 
 		addSubviews()
 		addActions()
@@ -149,10 +147,12 @@ private extension ResultViewController {
 	}
 
 	func setupValueLabel() {
+		bmiValueLabel.text = String(format: "%.1f", bmi.value)
 		bmiValueLabel.font = .systemFont(ofSize: 80, weight: .bold)
 	}
 
 	func setupAdviceLabel() {
+		adviceLabel.text = bmi.advice
 		adviceLabel.font = .preferredFont(forTextStyle: .title3)
 	}
 }
@@ -183,7 +183,7 @@ private extension ResultViewController {
 struct ResultViewControllerProvider: PreviewProvider {
 	static var previews: some View {
 		Group {
-			ResultViewController().previw()
+			ResultViewController(bmi: CalculatorManager.bmiStub).previw()
 		}
 	}
 }

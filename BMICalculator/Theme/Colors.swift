@@ -26,6 +26,9 @@ enum ColorNames {
 	
 	/// Фиолетовый
 	static let purple = "purple_purple"
+
+	/// Серый
+	static let gray = "Iron_gray"
 }
 
 /// Список цветор из ассетов
@@ -47,4 +50,7 @@ enum Colors {
 	
 	/// Фиолетовый
 	static let purple = UIColor(named: ColorNames.purple)
+
+	/// Серый
+	static let gray = UIColor(named: ColorNames.gray)!
 }

@@ -11,13 +11,11 @@ import SwiftUI
 #endif
 
 final class CalculateViewController: UIViewController {
-	
-	// MARK: - Outlets
-	
-	// MARK: - Public properties
-	
+
 	// MARK: - Dependencies
-	
+
+	private var calculatorManager: CalculatorManager
+
 	// MARK: - Private properties
 
 	private lazy var calculateBackgroundImage: UIImageView = makeImageView()
@@ -37,7 +35,16 @@ final class CalculateViewController: UIViewController {
 	private lazy var calculateButton: UIButton = makeButton()
 
 	// MARK: - Initialization
-	
+
+	init(calculatorManager: CalculatorManager) {
+		self.calculatorManager = calculatorManager
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
 	// MARK: - Lifecycle
 
 	override func viewDidLoad() {
@@ -50,9 +57,14 @@ final class CalculateViewController: UIViewController {
 		layout()
 	}
 
-	// MARK: - Public methods
-	
 	// MARK: - Private methods
+
+	private func presentResult() {
+		let bmi = calculatorManager.getBMI()
+		let resultController = ResultViewController(bmi: bmi)
+
+		present(resultController, animated: true)
+	}
 }
 
 // MARK: - Actions
@@ -79,9 +91,13 @@ private extension CalculateViewController {
 
 	func calculateTapped() -> UIAction {
 		UIAction { [weak self] _ in
-			print("CALCULATE")
-			let resultController = ResultViewController()
-			self?.present(resultController, animated: true)
+			guard let self else { return }
+
+			let height = heightSlider.value
+			let weight = weightSlider.value
+			calculatorManager.calculate(height: Double(height), weight: Double(weight))
+
+			presentResult()
 		}
 	}
 }
@@ -271,7 +287,7 @@ private extension CalculateViewController {
 struct CalculateViewControllerProvider: PreviewProvider {
 	static var previews: some View {
 		Group {
-			CalculateViewController().previw()
+			CalculateViewController(calculatorManager: CalculatorManager()).previw()
 		}
 	}
 }
